@@ -95,18 +95,18 @@
 
 
 
-<meta name="description" content="什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一般当AP">
+<meta name="description" content="NSURLProtocol的使用 注册protocol。12Class cls = NSClassFromString(@&amp;quot;__NSCFURLSessionConfiguration&amp;quot;) ?: NSClassFromString(@&amp;quot;NSURLSessionConfiguration&amp;quot;);[self swizzleSelector:@selector(pro">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS懒加载">
-<meta property="og:url" content="http://yoursite.com/2017/09/03/iOS懒加载/index.html">
+<meta property="og:title" content="NSURLProtocol以及GYHttpMock学习记录">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/NSURLProtocol以及GYHttpMock学习记录/index.html">
 <meta property="og:site_name" content="October-zhuo">
-<meta property="og:description" content="什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一般当AP">
+<meta property="og:description" content="NSURLProtocol的使用 注册protocol。12Class cls = NSClassFromString(@&amp;quot;__NSCFURLSessionConfiguration&amp;quot;) ?: NSClassFromString(@&amp;quot;NSURLSessionConfiguration&amp;quot;);[self swizzleSelector:@selector(pro">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-03T10:21:06.000Z">
+<meta property="og:updated_time" content="2017-09-03T11:23:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS懒加载">
-<meta name="twitter:description" content="什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一般当AP">
+<meta name="twitter:title" content="NSURLProtocol以及GYHttpMock学习记录">
+<meta name="twitter:description" content="NSURLProtocol的使用 注册protocol。12Class cls = NSClassFromString(@&amp;quot;__NSCFURLSessionConfiguration&amp;quot;) ?: NSClassFromString(@&amp;quot;NSURLSessionConfiguration&amp;quot;);[self swizzleSelector:@selector(pro">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/03/iOS懒加载/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/NSURLProtocol以及GYHttpMock学习记录/"/>
 
 
 
 
 
-  <title>iOS懒加载 | October-zhuo</title>
+  <title>NSURLProtocol以及GYHttpMock学习记录 | October-zhuo</title>
   
 
 
@@ -269,7 +269,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS懒加载/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/NSURLProtocol以及GYHttpMock学习记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="October-zhuo">
@@ -286,7 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOS懒加载</h1>
+          <h1 class="post-title" itemprop="name headline">NSURLProtocol以及GYHttpMock学习记录</h1>
         
 
         <div class="post-meta">
@@ -298,7 +298,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:14:55+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T19:23:22+08:00">
                 2017-09-03
               </time>
             
@@ -336,27 +336,36 @@
       
 
       
-        <h2 id="什么是懒加载"><a href="#什么是懒加载" class="headerlink" title="什么是懒加载"></a>什么是懒加载</h2><p>懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。</p>
-<h2 id="为什么要用懒加载"><a href="#为什么要用懒加载" class="headerlink" title="为什么要用懒加载"></a>为什么要用懒加载</h2><p>主要目的是为了提升效率</p>
-<ol>
-<li>在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。</li>
-<li>在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一般当APP接收到内存警告时，即在<code>didReceiveMemoryWarning</code>方法中程序员会做一些清理内存的操作，此时我们的数据或者其他控件占用的内存可能会被清理掉，这时如果再去访问这块内存就会出现野指针的问题。</li>
+        <h2 id="NSURLProtocol的使用"><a href="#NSURLProtocol的使用" class="headerlink" title="NSURLProtocol的使用"></a>NSURLProtocol的使用</h2><ul>
+<li>注册protocol。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class cls = NSClassFromString(@&quot;__NSCFURLSessionConfiguration&quot;) ?: NSClassFromString(@&quot;NSURLSessionConfiguration&quot;);</div><div class="line">[self swizzleSelector:@selector(protocolClasses) fromClass:cls toClass:[self class]];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上方法适合于NSURLSession的网络请求，替换掉protocolClasses。如果使用的是NSURLConnection，则应使用下面的方法：<br><code>[NSURLProtocol registerClass:[GYMockURLProtocol class]];</code></p>
+<ul>
+<li>实现protocol中必须实现的方法。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">+ (BOOL)canInitWithRequest:(NSURLRequest *)request;</div><div class="line">+ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request;</div><div class="line">+ (BOOL)requestIsCacheEquivalent:(NSURLRequest *)a toRequest:(NSURLRequest *)b;</div><div class="line">- (id)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client:(id&lt;NSURLProtocolClient&gt;)client;</div><div class="line">- (void)startLoading;</div><div class="line">- (void)stopLoading;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>canInitWithRequest</code>是自己注册的URLProtocol类（比如此处的GYMockURLProtocol）的方法入口。只有这个方法返回YES时，才会执行下面的方法，返回NO时就直接运行系统的方法。</p>
+<p><code>canonicalRequestForRequest</code>返回规范化的request。<code>This method returns a canonical version of the given request</code>。一般直接返回传入的request，而且不要在这里做规范化的操作，否则可能出现反复调用等奇怪现象。</p>
+<p><code>requestIsCacheEquivalent</code>请求是使用缓存还是发起新请求。直接返回NO，设置每次都发起新请求。</p>
+<p><code>- (id)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client:(id&lt;NSURLProtocolClient&gt;)client;</code>初始化方法，非必须实现。</p>
+<p><code>startLoading</code>核心方法，真正的网络请求和mock方法这这个方法里面定义并执行。</p>
+<p><code>stopLoading</code>网络请求完成后需要调用的方法。</p>
+<h2 id="GYHttpMock使用示例："><a href="#GYHttpMock使用示例：" class="headerlink" title="GYHttpMock使用示例："></a>GYHttpMock使用示例：</h2><ol>
+<li>添加需要mock的地址<code>mockRequest(@&quot;GET&quot;, @&quot;https://httpbin.org/get&quot;).isUpdatePartResponseBody(YES);</code></li>
+<li>发起网络请求<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">NSURLSession * session = [NSURLSession sharedSession];</div><div class="line">   [[session dataTaskWithURL:[NSURL URLWithString:@&quot;https://httpbin.org/get&quot;] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) &#123;</div><div class="line">       if (error) &#123;</div><div class="line">           NSLog(@&quot;%@&quot;,error);</div><div class="line">       &#125;else&#123;</div><div class="line">           NSLog(@&quot;%@&quot;,data);</div><div class="line">       &#125;</div><div class="line">   &#125;] resume];</div></pre></td></tr></table></figure>
+</li>
 </ol>
-<p>综合以上两点，我们采用懒加载的方式对数据以及控件进行加载，这样可以保证在使用的时候去加载，而且能保证使用时肯定有。</p>
-<h2 id="怎么用懒加载"><a href="#怎么用懒加载" class="headerlink" title="怎么用懒加载"></a>怎么用懒加载</h2><p>懒加载的实现，就是重写对象的getter方法。即在系统调用某个对象之前先进行判断，如果有这个对象（即对象不为空）就直接返回这个对象，如果对象为空就创建它并且返回它。一般而言需要懒加载的是数据类型和UI控件，以下将对这两点分开阐述。</p>
-<h3 id="数据类型的懒加载"><a href="#数据类型的懒加载" class="headerlink" title="数据类型的懒加载"></a>数据类型的懒加载</h3><p>数据类型的懒加载一般包括字典，数组，以及自定义的模型数据。以数组为例，懒加载的实现为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@interface NewObject()</div><div class="line"></div><div class="line">//声明一个数组属性(数据类型声明为strong)</div><div class="line">@property (nonatomic, strong) NSArray * myArray;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation NewObject</div><div class="line"></div><div class="line">//重写myArray的getter方法</div><div class="line">- (NSArray *)myArray&#123;</div><div class="line">    </div><div class="line">    if (_myArray == nil) &#123;</div><div class="line">        _myArray = [[NSArray alloc] init];</div><div class="line">    &#125;</div><div class="line">    return _myArray;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="UI控件的懒加载"><a href="#UI控件的懒加载" class="headerlink" title="UI控件的懒加载"></a>UI控件的懒加载</h3><p>UI控件一般包括UIView, UIButton等控件。以UIButton为例，如果使用storyboard，在连线时系统默认在类扩展中自动生成<code>@property (weak, nonatomic) IBOutlet UIButton *myButton;</code>。之所以声明为weak属性，是因为storyboard已经对myButton做了强引用，所以在类扩展中直接声明为weak属性，这样减少了出现内存泄露的可能。<br>而使用纯代码实现时，一般的代码模式是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@property (weak, nonatomic) UIButton *myButton;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (UIButton *)myButton&#123;</div><div class="line">    </div><div class="line">    if (_myButton == nil) &#123;</div><div class="line">        UIButton * tempButton = [[UIButton alloc] init];</div><div class="line">        _myButton = tempButton;</div><div class="line">        [self.view addSubview: _myButton];</div><div class="line">    &#125;</div><div class="line">    return _myButton;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>以上代码需要注意几个地方：</p>
-<ol>
-<li><p>为了和storyboard的形式一致，同时也是为了让控件在不用的时候能及时被销毁，属性也声明成了weak类型。</p>
-</li>
-<li><p>weak类型的变量就不能使用<code>_myButton = [[UIButton alloc] init];</code>进行定义。因为myButton是用weak修饰的，这样用<code>[[UIButton alloc] init]</code>申请的内存就只被weak类型的指针指向，而根据ARC内存管理机制，如果一个对象不再被strong指针指向，它将会被释放。所以此处要利用以上的格式定义这个对象。即<br><code>UIButton * tempButton = [[UIButton alloc] init]; 
-_myButton = tempButton;</code><br>这样在本层大括号的作用域内申请的内存地址就有强指针指向了。</p>
-</li>
-<li>对于子控件必须要加载到父view上才能显示出来。所以必须执行<code>addSubview</code>,而这条语句在懒加载中实现即可。具体原因如以下记录中的注释<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (_myButton == nil) &#123;</div><div class="line">        UIButton * tempButton = [[UIButton alloc] init];</div><div class="line">        _myButton = tempButton;</div><div class="line">        [self.view addSubview: _myButton];//调用addSubview，self.view 会对myButton有强引用</div><div class="line">    &#125;//出了这个大括号，tempButton 这个局部对象将会被销毁，如果前面没有执行addSubview，那新申请的button内存又会被释放</div><div class="line">    return _myButton;//如果不执行addSubview或者其他对button内存强引用的语句，那么此处返回的将是nil。</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>当然，以上的示例代码不是绝对的，实现一个功能的方法多种多样，只不过是自己习惯了这种写法，就简单记录一下。</p>
+<p>第二步中发起的网络请求就会被GYHttpMock mock住。</p>
+<p><strong><em>注意</em></strong>：如果第一步中不添加<code>isUpdatePartResponseBody(YES)</code>，则第二步中发起的网络请求就会被GYHttpMock mock住，不会真的发起网络请求，只是返回code码是200的请求头。当添加了<code>isUpdatePartResponseBody(YES)</code>时才会发起网络请求。</p>
+<p>关于GYHttpMock的具体API见<a href="http://wereadteam.github.io/2016/02/25/GYHttpMock/" target="_blank" rel="external">微信团队的博客</a>。</p>
+<h3 id="代码详解："><a href="#代码详解：" class="headerlink" title="代码详解："></a>代码详解：</h3><p><code>mockRequest</code>方法会初始化GYHttpMock，添加两个hook。依据传入的URL和方法名创建<code>GYMockRequest</code>实例并保存。添加的两个hook是：GYNSURLConnectionHook，GYNSURLSessionHook。命名看起来是添加两个hook，其实是在完成上面说的方法注册和方法交换的功能。</p>
+<p>当发起网络请求时，会先调用<code>GYHttpMock</code>的<code>canInitWithRequest</code>方法。此时会检查第一步中是否有该url对应的<code>GYMockRequest</code>实例，如果有则返回YES，表明我们想要自己拦截请求或者修改response，<code>GYHttpMock</code>的<code>startLoading</code>等方法会被调用。如果返回NO就会把控制权交还给系统。</p>
+<p><code>GYHttpMock</code>使用的是<code>NSURLConnection</code>发起真正的网络请求。</p>
+<p>无论是拦截请求，还是修改response，都应该主动调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (void)URLProtocol:(NSURLProtocol *)protocol didReceiveResponse:(NSURLResponse *)response cacheStoragePolicy:(NSURLCacheStoragePolicy)policy;</div><div class="line">- (void)URLProtocol:(NSURLProtocol *)protocol didLoadData:(NSData *)data;</div><div class="line">- (void)URLProtocolDidFinishLoading:(NSURLProtocol *)protocol;</div></pre></td></tr></table></figure></p>
+<p>等<code>URLProtocol</code>的方法，将最终数据返回给系统，系统会将数据传递给外部的网络请求者，比如AFNetworking或者NSURLSession的delegate。</p>
+<p><code>GYHttpMock</code>还有一个值得一提的点是他使用了函数式编程的思想。<code>GYMockRequestDSL</code>和<code>GYMockResponseDSL</code>里面通过block实现了函数式编程。实现方法是定义blcok属性，在block中完成操作，并最终在block中将self返回给调用者。<br>举例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">typedef GYMockResponseDSL *(^ResponseWithHeadersMethod)(NSDictionary *);</div><div class="line">@property (nonatomic, strong, readonly) ResponseWithHeaderMethod withHeader;</div><div class="line">- (ResponseWithHeadersMethod)withHeaders; &#123;</div><div class="line">    return ^(NSDictionary *headers) &#123;</div><div class="line">        for (NSString *header in headers) &#123;</div><div class="line">            NSString *value = [headers objectForKey:header];</div><div class="line">            [self.response setHeader:header value:value];</div><div class="line">        &#125;</div><div class="line">        return self;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>GYHttpMock</code>修改网络返回数据需要调用者清楚返回数据的结构，并预先定义好和该结构相符的字典才能完成修改。具体的修改过程是通过 <strong><em>递归</em></strong>，层级检查返回的json结构，在合适的地方添加新内容。调用的方法如下：<br><code>- (void)addEntriesFromDictionary:(NSDictionary *)dict to:(NSMutableDictionary *)targetDict</code></p>
 
       
     </div>
@@ -387,15 +396,15 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/09/03/UIButton设置多行富文本/" rel="next" title="UIButton设置多行富文本">
+                <i class="fa fa-chevron-left"></i> UIButton设置多行富文本
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/03/UIAppearance学习记录/" rel="prev" title="UIAppearance学习记录">
-                UIAppearance学习记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -519,7 +528,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是懒加载"><span class="nav-number">1.</span> <span class="nav-text">什么是懒加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用懒加载"><span class="nav-number">2.</span> <span class="nav-text">为什么要用懒加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么用懒加载"><span class="nav-number">3.</span> <span class="nav-text">怎么用懒加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型的懒加载"><span class="nav-number">3.1.</span> <span class="nav-text">数据类型的懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI控件的懒加载"><span class="nav-number">3.2.</span> <span class="nav-text">UI控件的懒加载</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NSURLProtocol的使用"><span class="nav-number">1.</span> <span class="nav-text">NSURLProtocol的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GYHttpMock使用示例："><span class="nav-number">2.</span> <span class="nav-text">GYHttpMock使用示例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码详解："><span class="nav-number">2.1.</span> <span class="nav-text">代码详解：</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -268,6 +268,155 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/NSURLProtocol以及GYHttpMock学习记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/NSURLProtocol以及GYHttpMock学习记录/" itemprop="url">NSURLProtocol以及GYHttpMock学习记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T19:23:22+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="NSURLProtocol的使用"><a href="#NSURLProtocol的使用" class="headerlink" title="NSURLProtocol的使用"></a>NSURLProtocol的使用</h2><ul>
+<li>注册protocol。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class cls = NSClassFromString(@&quot;__NSCFURLSessionConfiguration&quot;) ?: NSClassFromString(@&quot;NSURLSessionConfiguration&quot;);</div><div class="line">[self swizzleSelector:@selector(protocolClasses) fromClass:cls toClass:[self class]];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上方法适合于NSURLSession的网络请求，替换掉protocolClasses。如果使用的是NSURLConnection，则应使用下面的方法：<br><code>[NSURLProtocol registerClass:[GYMockURLProtocol class]];</code></p>
+<ul>
+<li>实现protocol中必须实现的方法。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">+ (BOOL)canInitWithRequest:(NSURLRequest *)request;</div><div class="line">+ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request;</div><div class="line">+ (BOOL)requestIsCacheEquivalent:(NSURLRequest *)a toRequest:(NSURLRequest *)b;</div><div class="line">- (id)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client:(id&lt;NSURLProtocolClient&gt;)client;</div><div class="line">- (void)startLoading;</div><div class="line">- (void)stopLoading;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>canInitWithRequest</code>是自己注册的URLProtocol类（比如此处的GYMockURLProtocol）的方法入口。只有这个方法返回YES时，才会执行下面的方法，返回NO时就直接运行系统的方法。</p>
+<p><code>canonicalRequestForRequest</code>返回规范化的request。<code>This method returns a canonical version of the given request</code>。一般直接返回传入的request，而且不要在这里做规范化的操作，否则可能出现反复调用等奇怪现象。</p>
+<p><code>requestIsCacheEquivalent</code>请求是使用缓存还是发起新请求。直接返回NO，设置每次都发起新请求。</p>
+<p><code>- (id)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client:(id&lt;NSURLProtocolClient&gt;)client;</code>初始化方法，非必须实现。</p>
+<p><code>startLoading</code>核心方法，真正的网络请求和mock方法这这个方法里面定义并执行。</p>
+<p><code>stopLoading</code>网络请求完成后需要调用的方法。</p>
+<h2 id="GYHttpMock使用示例："><a href="#GYHttpMock使用示例：" class="headerlink" title="GYHttpMock使用示例："></a>GYHttpMock使用示例：</h2><ol>
+<li>添加需要mock的地址<code>mockRequest(@&quot;GET&quot;, @&quot;https://httpbin.org/get&quot;).isUpdatePartResponseBody(YES);</code></li>
+<li>发起网络请求<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">NSURLSession * session = [NSURLSession sharedSession];</div><div class="line">   [[session dataTaskWithURL:[NSURL URLWithString:@&quot;https://httpbin.org/get&quot;] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) &#123;</div><div class="line">       if (error) &#123;</div><div class="line">           NSLog(@&quot;%@&quot;,error);</div><div class="line">       &#125;else&#123;</div><div class="line">           NSLog(@&quot;%@&quot;,data);</div><div class="line">       &#125;</div><div class="line">   &#125;] resume];</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>第二步中发起的网络请求就会被GYHttpMock mock住。</p>
+<p><strong><em>注意</em></strong>：如果第一步中不添加<code>isUpdatePartResponseBody(YES)</code>，则第二步中发起的网络请求就会被GYHttpMock mock住，不会真的发起网络请求，只是返回code码是200的请求头。当添加了<code>isUpdatePartResponseBody(YES)</code>时才会发起网络请求。</p>
+<p>关于GYHttpMock的具体API见<a href="http://wereadteam.github.io/2016/02/25/GYHttpMock/" target="_blank" rel="external">微信团队的博客</a>。</p>
+<h3 id="代码详解："><a href="#代码详解：" class="headerlink" title="代码详解："></a>代码详解：</h3><p><code>mockRequest</code>方法会初始化GYHttpMock，添加两个hook。依据传入的URL和方法名创建<code>GYMockRequest</code>实例并保存。添加的两个hook是：GYNSURLConnectionHook，GYNSURLSessionHook。命名看起来是添加两个hook，其实是在完成上面说的方法注册和方法交换的功能。</p>
+<p>当发起网络请求时，会先调用<code>GYHttpMock</code>的<code>canInitWithRequest</code>方法。此时会检查第一步中是否有该url对应的<code>GYMockRequest</code>实例，如果有则返回YES，表明我们想要自己拦截请求或者修改response，<code>GYHttpMock</code>的<code>startLoading</code>等方法会被调用。如果返回NO就会把控制权交还给系统。</p>
+<p><code>GYHttpMock</code>使用的是<code>NSURLConnection</code>发起真正的网络请求。</p>
+<p>无论是拦截请求，还是修改response，都应该主动调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (void)URLProtocol:(NSURLProtocol *)protocol didReceiveResponse:(NSURLResponse *)response cacheStoragePolicy:(NSURLCacheStoragePolicy)policy;</div><div class="line">- (void)URLProtocol:(NSURLProtocol *)protocol didLoadData:(NSData *)data;</div><div class="line">- (void)URLProtocolDidFinishLoading:(NSURLProtocol *)protocol;</div></pre></td></tr></table></figure></p>
+<p>等<code>URLProtocol</code>的方法，将最终数据返回给系统，系统会将数据传递给外部的网络请求者，比如AFNetworking或者NSURLSession的delegate。</p>
+<p><code>GYHttpMock</code>还有一个值得一提的点是他使用了函数式编程的思想。<code>GYMockRequestDSL</code>和<code>GYMockResponseDSL</code>里面通过block实现了函数式编程。实现方法是定义blcok属性，在block中完成操作，并最终在block中将self返回给调用者。<br>举例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">typedef GYMockResponseDSL *(^ResponseWithHeadersMethod)(NSDictionary *);</div><div class="line">@property (nonatomic, strong, readonly) ResponseWithHeaderMethod withHeader;</div><div class="line">- (ResponseWithHeadersMethod)withHeaders; &#123;</div><div class="line">    return ^(NSDictionary *headers) &#123;</div><div class="line">        for (NSString *header in headers) &#123;</div><div class="line">            NSString *value = [headers objectForKey:header];</div><div class="line">            [self.response setHeader:header value:value];</div><div class="line">        &#125;</div><div class="line">        return self;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>GYHttpMock</code>修改网络返回数据需要调用者清楚返回数据的结构，并预先定义好和该结构相符的字典才能完成修改。具体的修改过程是通过 <strong><em>递归</em></strong>，层级检查返回的json结构，在合适的地方添加新内容。调用的方法如下：<br><code>- (void)addEntriesFromDictionary:(NSDictionary *)dict to:(NSMutableDictionary *)targetDict</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/UIButton设置多行富文本/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1597,7 +1746,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
