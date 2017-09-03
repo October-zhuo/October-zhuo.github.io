@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -95,16 +95,21 @@
 
 
 
-<meta name="description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="October-zhuo">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+<meta name="description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift开发--真机调试出错处理">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/index.html">
 <meta property="og:site_name" content="October-zhuo">
-<meta property="og:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta property="og:description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1470392-cbd678d1b3e13fa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-03T10:43:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="October-zhuo">
-<meta name="twitter:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta name="twitter:title" content="swift开发--真机调试出错处理">
+<meta name="twitter:description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -134,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/"/>
 
 
 
 
 
-  <title>归档 | October-zhuo</title>
+  <title>swift开发--真机调试出错处理 | October-zhuo</title>
   
 
 
@@ -159,7 +164,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -253,185 +258,161 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">swift开发--真机调试出错处理</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:41:53+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 4 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/03/swift开发-真机调试出错处理/" itemprop="url">
-              
-                <span itemprop="name">swift开发--真机调试出错处理</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-03T18:41:53+08:00"
-              content="2017-09-03" >
-          09-03
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/03/iOS事件处理总结与思考/" itemprop="url">
-              
-                <span itemprop="name">iOS事件处理总结与思考</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-03T18:32:26+08:00"
-              content="2017-09-03" >
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/03/UIAppearance学习记录/" itemprop="url">
-              
-                <span itemprop="name">UIAppearance学习记录</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-03T18:28:25+08:00"
-              content="2017-09-03" >
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下<br><code>dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:</code><br><code>Reason: no suitable image found. Did find:</code><br>而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以上错误。所以这跟项目没有关系，应该是XCode或者系统的问题。Google之后，贴出解决方法。</p>
+<p><strong>具体情况：</strong><br>XCode8.2.1 没有使用CocoaPod iPhone6S（10.2.1）swift3.0</p>
+<p><strong>解决方法：</strong></p>
+<p>步骤一：查看开发证书配置。</p>
+<p>进入 钥匙串 -&gt; 系统 -&gt; 证书 点击<code>Apple Worldwide Developer Relations Certification Authority</code><br>查看此处配置。需要将“始终信任”修改为“使用系统默认”。<br>修改完成的效果如下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="
+![Uploading Xcode_049764.png . . .]
+"></p>
+<p>步骤二：清理缓存。</p>
+<p>重启电脑。删除<code>~/Library/Developer/Xcode/DerivedData```文件夹和```~/Library/Caches/com.apple.dt.Xcode</code>文件。详见下图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-cbd678d1b3e13fa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="
+![Xcode.png](http://upload-images.jianshu.io/upload_images/1470392-7698a5ccb1a3c6b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+"></p>
+<p>此时再打开Xcode，真机运行应该就可以了。</p>
+<p>以上步骤二是清理缓存，这个我能理解。第一步是从stackoverflow查来的。具体为什么要设置证书为系统默认，我目前还没有搞清楚。如果有知道的同学欢迎指教。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/03/iOS懒加载/" itemprop="url">
-              
-                <span itemprop="name">iOS懒加载</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-03T18:14:55+08:00"
-              content="2017-09-03" >
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/03/iOS事件处理总结与思考/" rel="next" title="iOS事件处理总结与思考">
+                <i class="fa fa-chevron-left"></i> iOS事件处理总结与思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -439,6 +420,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -639,6 +624,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
 
   
 
