@@ -268,6 +268,164 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Webview中JS和OC的通信-WebViewJavascriptBridge源码学习记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/Webview中JS和OC的通信-WebViewJavascriptBridge源码学习记录/" itemprop="url">Webview中JS和OC的通信--WebViewJavascriptBridge源码学习记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:52:37+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>webview的JS和OC的通信主要通过webview调用<code>stringByEvaluatingJavaScriptFromString</code>方法和OC调用webview的代理方法<code>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;</code>实现。<br>WebViewJavascriptBridge也是通过调用者两个方法实现的JS和OC通信。</p>
+<h2 id="WebViewJavascriptBridge结构"><a href="#WebViewJavascriptBridge结构" class="headerlink" title="WebViewJavascriptBridge结构"></a>WebViewJavascriptBridge结构</h2><p><img src="http://upload-images.jianshu.io/upload_images/1470392-59a714682f909658.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WebViewJavascriptBridgeBase_h.png"></p>
+<p>因为iOS现在有UIWebview和WKWebview(iOS8.0启用)两种webview，所以这个库中有WebViewJavascriptBridge和WKWebViewJavascriptBridge两个对应的bridge。这两个bridge都是通过成为WebViewJavascriptBridgeBase的delegate，实现和WebViewJavascriptBridgeBase通信的。WebViewJavascriptBridge_JS是JS代码，在webview加载完成后通过<code>stringByEvaluatingJavaScriptFromString</code>方法注入这个类里面的JS方法。</p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><ul>
+<li>先看几个宏定义<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#define kCustomProtocolScheme @&quot;wvjbscheme&quot;</div><div class="line">#define kQueueHasMessage      @&quot;__WVJB_QUEUE_MESSAGE__&quot;</div><div class="line">#define kBridgeLoaded         @&quot;__BRIDGE_LOADED__&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>OC是通过代理方法实现截获JS请求的。为了实现截获的真的是JS发送通信数据而不截获webview本身自己的网络请求。WebViewJavascriptBridge定义了以上的scheme。当发起网络请求时，通过判断是不是自己定义的scheme来决定需不需要拦截这次请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType &#123;</div><div class="line">    if (webView != _webView) &#123; return YES; &#125;</div><div class="line">    NSURL *url = [request URL];</div><div class="line">    __strong WVJB_WEBVIEW_DELEGATE_TYPE* strongDelegate = _webViewDelegate;</div><div class="line">    </div><div class="line">    //先判断是不是kCustomProtocolScheme。如果是才拦截，不是则放过此请求</div><div class="line">    if ([_base isCorrectProcotocolScheme:url]) &#123;</div><div class="line">    </div><div class="line">    		//判断是否是webview加载完成的url请求。如果是就执行注入JS代码的方法。</div><div class="line">        if ([_base isBridgeLoadedURL:url]) &#123;</div><div class="line">            [_base injectJavascriptFile];</div><div class="line">            </div><div class="line">        //判断是否是需要处理的JS通信请求。</div><div class="line">        &#125; else if ([_base isQueueMessageURL:url]) &#123;</div><div class="line">            NSString *messageQueueString = [self _evaluateJavascript:[_base webViewJavascriptFetchQueyCommand]];</div><div class="line">            [_base flushMessageQueue:messageQueueString];</div><div class="line">            </div><div class="line">         //未知url，不处理</div><div class="line">        &#125; else &#123;</div><div class="line">            [_base logUnkownMessage:url];</div><div class="line">        &#125;</div><div class="line">        return NO;</div><div class="line">        </div><div class="line">      //正常的webview网络请求。</div><div class="line">    &#125; else if (strongDelegate &amp;&amp; [strongDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) &#123;</div><div class="line">        return [strongDelegate webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];</div><div class="line">    &#125; else &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>另外需要注意的点是injectJavascriptFile方法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (void)injectJavascriptFile &#123;</div><div class="line">    NSString *js = WebViewJavascriptBridge_js();</div><div class="line">    [self _evaluateJavascript:js];</div><div class="line">    if (self.startupMessageQueue) &#123;</div><div class="line">        NSArray* queue = self.startupMessageQueue;</div><div class="line">        self.startupMessageQueue = nil;</div><div class="line">        for (id queuedMessage in queue) &#123;</div><div class="line">            [self _dispatchMessage:queuedMessage];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果在webview还没有加载完成时，OC就通过bridge对JS发起通信，这个时候通信是无法到达的。bridge的方法是先把这写请求存储在startupMessageQueue数组中，等到webview加载完成后再依次发送这些请求。并且把startupMessageQueue数组置为nil。这样下次再有OC的请求时就直接发送，不再缓存了。这是一个值得学习的设计思路。</p>
+<ul>
+<li>对于JS，它是给DOM添加了一个iframe标签来实现调用bridge的。具体的方法是</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function setupWebViewJavascriptBridge(callback) &#123;</div><div class="line">	if (window.WebViewJavascriptBridge) &#123; return callback(WebViewJavascriptBridge); &#125;</div><div class="line">	if (window.WVJBCallbacks) &#123; return window.WVJBCallbacks.push(callback); &#125;</div><div class="line">	window.WVJBCallbacks = [callback];</div><div class="line">	var WVJBIframe = document.createElement(&apos;iframe&apos;);</div><div class="line">	WVJBIframe.style.display = &apos;none&apos;;</div><div class="line">	WVJBIframe.src = &apos;https://__bridge_loaded__&apos;;</div><div class="line">	document.documentElement.appendChild(WVJBIframe);</div><div class="line">	setTimeout(function() &#123; document.documentElement.removeChild(WVJBIframe) &#125;, 0)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码必须要粘贴到自己的JS代码中，否则bride无法正常运行。</p>
+<ul>
+<li>自己拼写JS代码在注入到webview前，有两点需要注意。一是特殊字符的转义，而是确保代码运行在主线程。这个bridge在_dispatchMessage方法中进行了处理。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (void)_dispatchMessage:(WVJBMessage*)message &#123;</div><div class="line">    NSString *messageJSON = [self _serializeMessage:message pretty:NO];</div><div class="line">    [self _log:@&quot;SEND&quot; json:messageJSON];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\\&quot; withString:@&quot;\\\\&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\&quot;&quot; withString:@&quot;\\\&quot;&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\&apos;&quot; withString:@&quot;\\\&apos;&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\n&quot; withString:@&quot;\\n&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\r&quot; withString:@&quot;\\r&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\f&quot; withString:@&quot;\\f&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\u2028&quot; withString:@&quot;\\u2028&quot;];</div><div class="line">    messageJSON = [messageJSON stringByReplacingOccurrencesOfString:@&quot;\u2029&quot; withString:@&quot;\\u2029&quot;];</div><div class="line">    </div><div class="line">    NSString* javascriptCommand = [NSString stringWithFormat:@&quot;WebViewJavascriptBridge._handleMessageFromObjC(&apos;%@&apos;);&quot;, messageJSON];</div><div class="line">    if ([[NSThread currentThread] isMainThread]) &#123;</div><div class="line">        [self _evaluateJavascript:javascriptCommand];</div><div class="line"></div><div class="line">    &#125; else &#123;</div><div class="line">        dispatch_sync(dispatch_get_main_queue(), ^&#123;</div><div class="line">            [self _evaluateJavascript:javascriptCommand];</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><h3 id="简单通信"><a href="#简单通信" class="headerlink" title="简单通信"></a>简单通信</h3><p>没有回调的通信–OC给JS发消息<br>OC调用<code>- (void)callHandler:(NSString*)handlerName data:(id)data;</code>方法。这个方法会把handlerName和data包装成message。并通过<code>stringByEvaluatingJavaScriptFromString</code>方法发送给webview。webview会调用注入的JS方法<code>_dispatchMessageFromObjC</code>接收这次请求。然后调用回调方法<code>var handler = messageHandlers[message.handlerName];</code>处理这次请求，这个回调就是webview加载时注册的那个回调。</p>
+<p>没有回调的通信–JS给OC发消息<br>JS调用<code>bridge.callHandler()</code>方法来给OC发送消息，callHandler方法是在webview加载完成后注入到webview的。callHandler方法又会调用_doSend方法，_doSend把要发送的数据包装成message进行发送。具体的发送动作是<code>messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + &#39;://&#39; + QUEUE_HAS_MESSAGE;</code>通过给iframe重新设置src属性，就会触发webview重新请求新设置的src。此时webview的代理方法就会接收到这次请求，并按照设定的scheme判断是否截获这次请求。当截获到这次请求后，OC会调用<code>WVJBHandler handler = self.messageHandlers[message[@&quot;handlerName&quot;]];</code>这个回调处理请求，这个请求是OC设置bridge时注册的回调。这样JS就完成了给OC发消息的动作。</p>
+<p>可以看到，OC和JS的互调很相似，两者都是先注册一个回调，在对方的请求到达时，调用这个回调。</p>
+<p>有回调的通信比较复杂，不过说白了就是“互发消息”。<br>有回调的通信–OC调用JS</p>
+<ul>
+<li><p>OC在发送发送消息时会先把回调加载进responseCallbacks字典缓存。回调是value，key是callbackID（一个自增的long类型值<code>++_uniqueId</code>）。</p>
+</li>
+<li><p>JS在收到消息（_dispatchMessageFromObjC被执行）时，会判断消息是否包含callbackID，如果有就把callbackID设置为返回消息的responseID字段。并定义回调responseCallback，这个新定义的回调在执行时会调用_doSend方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (message.callbackId) &#123;</div><div class="line">					var callbackResponseId = message.callbackId;</div><div class="line">					responseCallback = function(responseData) &#123;</div><div class="line">						_doSend(&#123; handlerName:message.handlerName, responseId:callbackResponseId, responseData:responseData &#125;);</div><div class="line">					&#125;;</div><div class="line">				&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JS中调用注册时的回调，然后调用上面代码中定义的responseCallback，从而就会调用到里面的_doSend方法。这样JS就会把返回消息发送给OC。</p>
+</li>
+<li><p>OC在收到消息后，会进行处理，先判断message是否有responseId，如果有就从responseCallbacks缓存中通过responseId查询到对应的回调，并调用这个回调。然后清除responseCallbacks的这个回调记录。此时JS返回给OC的消息就能被OC获取了。</p>
+</li>
+</ul>
+<p>整个调用过程结束。<br>其实这个调用过程就是OC先缓存一个回调，把消息发送给JS，JS获取到OC需要回调，调用一次发送消息把数据发送回给OC，OC判断接收的消息是回调、从缓存中取得回调并执行的过程。<br>JS调用OC的过程和上面的过程相似，只是JS需要先缓存回调，最后获取相应的回调并执行。这里不再具体分析。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS-Protobuf3-3安装与使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1011,7 +1169,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
