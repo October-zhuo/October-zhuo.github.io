@@ -268,6 +268,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS后台推送证书相关-java-php-go语言pem证书生成/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/iOS后台推送证书相关-java-php-go语言pem证书生成/" itemprop="url">iOS后台推送证书相关--java,php,go语言pem证书生成</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T19:07:24+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><ul>
+<li>PEM文件：Privacy Enhanced Mail。是OpenSSL默认采用的存放格式。以–BEGIN XXX–，–END XXX–开头和结尾</li>
+<li>pkcs12：证书格式。包含用户证书、crl、用户私钥（私钥是加密存放的）以及证书链证书，允许口令保护。</li>
+<li>X509：证书格式。必须证明公钥及其所有者的姓名是一致的。一份X509证书是一些标准字段的集合，这些字段包含有关用户或设备及其相应的公钥信息。X509标准定义了证书应该包含哪些信息，并描述了这些信息是如何编码的。</li>
+</ul>
+<h2 id="java-amp-php"><a href="#java-amp-php" class="headerlink" title="java&amp;php"></a>java&amp;php</h2><p>生成Java或者PHP后台需要的证书需要的原始资料是两个p12证书文件。<br>cer证书的p12文件，此处取名为apns-dev-cert.p12</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-ee7bc387ae47f121.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="钥匙串访问.png"></p>
+<p>私钥的p12文件，此处取名为apns-dev-key.p12</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-6836269f319658a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="钥匙串访问 2.png"></p>
+<p>具体生成步骤</p>
+<ol>
+<li>//将apns-dev-cert.p12文件转换成apns-dev-cert.pem证书。证书格式是pkcs12<br> openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12</li>
+<li>//将apns-dev-key.p12文件转换成apns-dev-key.pem证书。证书格式是pkcs12。<br> openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12</li>
+<li>//移除密码。将第二步中的密码移除<br> openssl rsa -in apns-dev-key.pem -out apns-dev-key.pem</li>
+<li>//将apns-dev-cert.pem文件和apns-dev-key.pem文件合并成apns-dev.pem文件。该文件就是后台发送通知时需要使用的文件<br> cat apns-dev-cert.pem apns-dev-key.pem &gt; apns-dev.pem</li>
+</ol>
+<h2 id="go"><a href="#go" class="headerlink" title="go"></a>go</h2><p>生成go语言后台推送证书的原始资料是一个cer证书和一个p12证书<br>推送证书，此处取名为aps.cer</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-812bb0f847d21ada.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="证书.png"></p>
+<p>私钥的p12证书</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1470392-30d6afc3ffacf9c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="钥匙串访问 2.png"></p>
+<p>生成步骤</p>
+<ol>
+<li>//推送证书cer文件生成推送证书的pem文件<br> openssl x509 -in aps.cer -inform der -out cert.pem  </li>
+<li>//key的p12文件生成key的pem文件<br> openssl pkcs12 -nocerts -out key.pem -in distribution_key.p12 </li>
+<li>//生成不加密的key.pem文件//生成不加密的key的pem文件。到这里所需的cert.pem文件和unencryptkey.pem 文件就生成了。go语言需要两个pem文件。<br> openssl rsa -in key.pem -out unencryptkey.pem</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/Webview中JS和OC的通信-WebViewJavascriptBridge源码学习记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1168,7 +1313,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
