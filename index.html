@@ -268,6 +268,140 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS-Protobuf3-3安装与使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/iOS-Protobuf3-3安装与使用/" itemprop="url">iOS Protobuf3.3安装与使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:47:44+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>使用Protobuf是因为其性能好，效率高。具体介绍可以参考谷歌官方文档<a href="https://developers.google.com/protocol-buffers/。" target="_blank" rel="external">https://developers.google.com/protocol-buffers/。</a><br>下面介绍如何安装使用Protobuf3.0及以上版本，编译生成OC代码，并在工程中正确使用。</p>
+<h2 id="安装Protobuf"><a href="#安装Protobuf" class="headerlink" title="安装Protobuf"></a>安装Protobuf</h2><p>从GitHub下载代码。<a href="https://github.com/google/protobuf。" target="_blank" rel="external">https://github.com/google/protobuf。</a><br>直接clone就是最新的代码。当然也可以在clone时指定自己需要的版本。本文使用的是最新的代码，即Protobuf3.3.0。<br>下载完成后，使用终端，切换至protobuf所在的文件路径。<br>安装前需要先确认自己的MAC安装了autoconf和automake。如果没有安装可以直接通过命令行<code>brew install autoconf</code>以及<code>brew install automake</code>进行安装。其中brew是指HomeBrew，如果MAC没有安装HomeBrew，可以通过命令行<code>/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code>进行安装。<br>准备工作进行完后，就开始安装Protobuf。<br>还是先确认在Protobuf所在的文件目录下。然后按步骤执行* <code>sudo ./autogen.sh</code></p>
+<ul>
+<li><code>./configure</code></li>
+<li><code>make</code></li>
+<li><code>make install</code><br>此时protobuf就安装成功了。执行<code>protocbuf --version</code>就可以看到安装的版本号了。</li>
+</ul>
+<h2 id="编译生成OC代码"><a href="#编译生成OC代码" class="headerlink" title="编译生成OC代码"></a>编译生成OC代码</h2><p>创建proto文件。此处使用最简单的例子。创建User.proto。里面的内容是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">message UserInfo &#123;</div><div class="line">  required int64 id = 1;</div><div class="line">  required string name = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后使用终端切换到User.proto所在的文件夹路径。执行命令<code>protocbuf User.proto --objc_out=./</code>。以上是最简单的生成OC代码的命令。执行完成后，会在当前文件夹生成User.pbobjc.h和User.pbobjc.m两个文件。到此生成OC代码的工作也完成了。</p>
+<h2 id="工程中使用生成的代码"><a href="#工程中使用生成的代码" class="headerlink" title="工程中使用生成的代码"></a>工程中使用生成的代码</h2><p>在生成.h和.m文件后，把它们引入到自己的工程，如果此时直接编译会报错，原因是没有引入PB的文件。解决方法有两个：</p>
+<ul>
+<li>使用Cocoapod，在podfile中添加<code>pod &#39;Protobuf&#39;</code>注意大小写。然后<code>pod install</code>再编译就可以了。这个方法简单方便。</li>
+<li>如果不适用pod管理，就要把PB需要的文件手动引入到工程。具体文件在第一步Colne的protobuf/objectivec文件夹里面。而且还得注意如果工程是ARC时，要把部分PB文件置为<code>-fno-objc-arc</code>。具体设置参考GitHub文档<a href="https://github.com/google/protobuf/tree/master/objectivec" target="_blank" rel="external">https://github.com/google/protobuf/tree/master/objectivec</a></li>
+</ul>
+<p>此时再次编译就OK了。使用方法也很简单<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">User *tom = [[User alloc] init];</div><div class="line">tom.name = @&quot;tom&quot;;</div><div class="line">NSData *tomData = [tom data];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,7 +1011,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

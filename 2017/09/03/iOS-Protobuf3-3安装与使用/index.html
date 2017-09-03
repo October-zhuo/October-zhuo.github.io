@@ -95,21 +95,18 @@
 
 
 
-<meta name="description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
+<meta name="description" content="使用Protobuf是因为其性能好，效率高。具体介绍可以参考谷歌官方文档https://developers.google.com/protocol-buffers/。下面介绍如何安装使用Protobuf3.0及以上版本，编译生成OC代码，并在工程中正确使用。 安装Protobuf从GitHub下载代码。https://github.com/google/protobuf。直接clone就是最新的">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="swift开发--真机调试出错处理">
-<meta property="og:url" content="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/index.html">
+<meta property="og:title" content="iOS Protobuf3.3安装与使用">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/iOS-Protobuf3-3安装与使用/index.html">
 <meta property="og:site_name" content="October-zhuo">
-<meta property="og:description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
+<meta property="og:description" content="使用Protobuf是因为其性能好，效率高。具体介绍可以参考谷歌官方文档https://developers.google.com/protocol-buffers/。下面介绍如何安装使用Protobuf3.0及以上版本，编译生成OC代码，并在工程中正确使用。 安装Protobuf从GitHub下载代码。https://github.com/google/protobuf。直接clone就是最新的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1470392-cbd678d1b3e13fa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-09-03T10:46:15.000Z">
+<meta property="og:updated_time" content="2017-09-03T10:48:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="swift开发--真机调试出错处理">
-<meta name="twitter:description" content="使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:Reason: no suitable image found. Did find:而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="iOS Protobuf3.3安装与使用">
+<meta name="twitter:description" content="使用Protobuf是因为其性能好，效率高。具体介绍可以参考谷歌官方文档https://developers.google.com/protocol-buffers/。下面介绍如何安装使用Protobuf3.0及以上版本，编译生成OC代码，并在工程中正确使用。 安装Protobuf从GitHub下载代码。https://github.com/google/protobuf。直接clone就是最新的">
 
 
 
@@ -139,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/iOS-Protobuf3-3安装与使用/"/>
 
 
 
 
 
-  <title>swift开发--真机调试出错处理 | October-zhuo</title>
+  <title>iOS Protobuf3.3安装与使用 | October-zhuo</title>
   
 
 
@@ -272,7 +269,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/swift开发-真机调试出错处理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS-Protobuf3-3安装与使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="October-zhuo">
@@ -289,7 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">swift开发--真机调试出错处理</h1>
+          <h1 class="post-title" itemprop="name headline">iOS Protobuf3.3安装与使用</h1>
         
 
         <div class="post-meta">
@@ -301,7 +298,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:41:53+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:47:44+08:00">
                 2017-09-03
               </time>
             
@@ -339,21 +336,21 @@
       
 
       
-        <p>使用swift开发时遇到一个问题，代码在模拟器下运行正常。但是一旦运行到真机上，就出现问题。关键词如下<br><code>dyld: Library not loaded: @rpath/libswiftCore.dylib Referenced from:</code><br><code>Reason: no suitable image found. Did find:</code><br>而且哪怕新建一个swift工程，在什么都不做的情况下，直接在真机运行也会报出以上错误。所以这跟项目没有关系，应该是XCode或者系统的问题。Google之后，贴出解决方法。</p>
-<p><strong>具体情况：</strong><br>XCode8.2.1 没有使用CocoaPod iPhone6S（10.2.1）swift3.0</p>
-<p><strong>解决方法：</strong></p>
-<p>步骤一：查看开发证书配置。</p>
-<p>进入 钥匙串 -&gt; 系统 -&gt; 证书 点击<code>Apple Worldwide Developer Relations Certification Authority</code><br>查看此处配置。需要将“始终信任”修改为“使用系统默认”。<br>修改完成的效果如下图：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1470392-68072d77945edfa3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="
-![Uploading Xcode_049764.png . . .]
-"></p>
-<p>步骤二：清理缓存。</p>
-<p>重启电脑。删除<code>~/Library/Developer/Xcode/DerivedData</code>文件夹和<code>~/Library/Caches/com.apple.dt.Xcode</code>文件。详见下图：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1470392-cbd678d1b3e13fa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="
-![Xcode.png](http://upload-images.jianshu.io/upload_images/1470392-7698a5ccb1a3c6b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-"></p>
-<p>此时再打开Xcode，真机运行应该就可以了。</p>
-<p>以上步骤二是清理缓存，这个我能理解。第一步是从stackoverflow查来的。具体为什么要设置证书为系统默认，我目前还没有搞清楚。如果有知道的同学欢迎指教。</p>
+        <p>使用Protobuf是因为其性能好，效率高。具体介绍可以参考谷歌官方文档<a href="https://developers.google.com/protocol-buffers/。" target="_blank" rel="external">https://developers.google.com/protocol-buffers/。</a><br>下面介绍如何安装使用Protobuf3.0及以上版本，编译生成OC代码，并在工程中正确使用。</p>
+<h2 id="安装Protobuf"><a href="#安装Protobuf" class="headerlink" title="安装Protobuf"></a>安装Protobuf</h2><p>从GitHub下载代码。<a href="https://github.com/google/protobuf。" target="_blank" rel="external">https://github.com/google/protobuf。</a><br>直接clone就是最新的代码。当然也可以在clone时指定自己需要的版本。本文使用的是最新的代码，即Protobuf3.3.0。<br>下载完成后，使用终端，切换至protobuf所在的文件路径。<br>安装前需要先确认自己的MAC安装了autoconf和automake。如果没有安装可以直接通过命令行<code>brew install autoconf</code>以及<code>brew install automake</code>进行安装。其中brew是指HomeBrew，如果MAC没有安装HomeBrew，可以通过命令行<code>/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code>进行安装。<br>准备工作进行完后，就开始安装Protobuf。<br>还是先确认在Protobuf所在的文件目录下。然后按步骤执行* <code>sudo ./autogen.sh</code></p>
+<ul>
+<li><code>./configure</code></li>
+<li><code>make</code></li>
+<li><code>make install</code><br>此时protobuf就安装成功了。执行<code>protocbuf --version</code>就可以看到安装的版本号了。</li>
+</ul>
+<h2 id="编译生成OC代码"><a href="#编译生成OC代码" class="headerlink" title="编译生成OC代码"></a>编译生成OC代码</h2><p>创建proto文件。此处使用最简单的例子。创建User.proto。里面的内容是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">message UserInfo &#123;</div><div class="line">  required int64 id = 1;</div><div class="line">  required string name = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后使用终端切换到User.proto所在的文件夹路径。执行命令<code>protocbuf User.proto --objc_out=./</code>。以上是最简单的生成OC代码的命令。执行完成后，会在当前文件夹生成User.pbobjc.h和User.pbobjc.m两个文件。到此生成OC代码的工作也完成了。</p>
+<h2 id="工程中使用生成的代码"><a href="#工程中使用生成的代码" class="headerlink" title="工程中使用生成的代码"></a>工程中使用生成的代码</h2><p>在生成.h和.m文件后，把它们引入到自己的工程，如果此时直接编译会报错，原因是没有引入PB的文件。解决方法有两个：</p>
+<ul>
+<li>使用Cocoapod，在podfile中添加<code>pod &#39;Protobuf&#39;</code>注意大小写。然后<code>pod install</code>再编译就可以了。这个方法简单方便。</li>
+<li>如果不适用pod管理，就要把PB需要的文件手动引入到工程。具体文件在第一步Colne的protobuf/objectivec文件夹里面。而且还得注意如果工程是ARC时，要把部分PB文件置为<code>-fno-objc-arc</code>。具体设置参考GitHub文档<a href="https://github.com/google/protobuf/tree/master/objectivec" target="_blank" rel="external">https://github.com/google/protobuf/tree/master/objectivec</a></li>
+</ul>
+<p>此时再次编译就OK了。使用方法也很简单<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">User *tom = [[User alloc] init];</div><div class="line">tom.name = @&quot;tom&quot;;</div><div class="line">NSData *tomData = [tom data];</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -384,8 +381,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/03/iOS事件处理总结与思考/" rel="next" title="iOS事件处理总结与思考">
-                <i class="fa fa-chevron-left"></i> iOS事件处理总结与思考
+              <a href="/2017/09/03/swift开发-真机调试出错处理/" rel="next" title="swift开发--真机调试出错处理">
+                <i class="fa fa-chevron-left"></i> swift开发--真机调试出错处理
               </a>
             
           </div>
@@ -393,10 +390,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/03/iOS-Protobuf3-3安装与使用/" rel="prev" title="iOS Protobuf3.3安装与使用">
-                iOS Protobuf3.3安装与使用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -448,8 +441,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">October-zhuo</p>
@@ -501,6 +503,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Protobuf"><span class="nav-number">1.</span> <span class="nav-text">安装Protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译生成OC代码"><span class="nav-number">2.</span> <span class="nav-text">编译生成OC代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程中使用生成的代码"><span class="nav-number">3.</span> <span class="nav-text">工程中使用生成的代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
