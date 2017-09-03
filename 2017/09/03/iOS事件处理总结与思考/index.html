@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -95,16 +95,18 @@
 
 
 
-<meta name="description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="October-zhuo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="UIControlUIControl继承自UIView。UIControl 依赖于Target-Action设计模式。即当发生一个事件时，UIControl会调用sendAction:to:forEvent:方法来将行为消息发送到UIApplication对象，再由UIApplication对象调用其sendAction:to:fromSender:forEvent:方法来将消息分发到指定的tar">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS事件处理总结与思考">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/iOS事件处理总结与思考/index.html">
 <meta property="og:site_name" content="October-zhuo">
-<meta property="og:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta property="og:description" content="UIControlUIControl继承自UIView。UIControl 依赖于Target-Action设计模式。即当发生一个事件时，UIControl会调用sendAction:to:forEvent:方法来将行为消息发送到UIApplication对象，再由UIApplication对象调用其sendAction:to:fromSender:forEvent:方法来将消息分发到指定的tar">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-03T10:33:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="October-zhuo">
-<meta name="twitter:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta name="twitter:title" content="iOS事件处理总结与思考">
+<meta name="twitter:description" content="UIControlUIControl继承自UIView。UIControl 依赖于Target-Action设计模式。即当发生一个事件时，UIControl会调用sendAction:to:forEvent:方法来将行为消息发送到UIApplication对象，再由UIApplication对象调用其sendAction:to:fromSender:forEvent:方法来将消息分发到指定的tar">
 
 
 
@@ -134,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/iOS事件处理总结与思考/"/>
 
 
 
 
 
-  <title>October-zhuo</title>
+  <title>iOS事件处理总结与思考 | October-zhuo</title>
   
 
 
@@ -159,8 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -253,9 +254,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -285,9 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/iOS事件处理总结与思考/" itemprop="url">iOS事件处理总结与思考</a></h1>
+          <h1 class="post-title" itemprop="name headline">iOS事件处理总结与思考</h1>
         
 
         <div class="post-meta">
@@ -337,9 +336,7 @@
       
 
       
-        
-          
-            <h2 id="UIControl"><a href="#UIControl" class="headerlink" title="UIControl"></a>UIControl</h2><p>UIControl继承自UIView。<br>UIControl 依赖于Target-Action设计模式。即当发生一个事件时，UIControl会调用sendAction:to:forEvent:方法来将行为消息发送到UIApplication对象，再由UIApplication对象调用其sendAction:to:fromSender:forEvent:方法来将消息分发到指定的target上。如果没有指定target，则会将事件分发到响应链上第一个想处理该消息的对象上。</p>
+        <h2 id="UIControl"><a href="#UIControl" class="headerlink" title="UIControl"></a>UIControl</h2><p>UIControl继承自UIView。<br>UIControl 依赖于Target-Action设计模式。即当发生一个事件时，UIControl会调用sendAction:to:forEvent:方法来将行为消息发送到UIApplication对象，再由UIApplication对象调用其sendAction:to:fromSender:forEvent:方法来将消息分发到指定的target上。如果没有指定target，则会将事件分发到响应链上第一个想处理该消息的对象上。</p>
 <p>UIControl有不同的状态</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">typedef NS_OPTIONS(NSUInteger, UIControlState) &#123;</div><div class="line">    UIControlStateNormal       = 0,</div><div class="line">    UIControlStateHighlighted  = 1 &lt;&lt; 0,                  // used when UIControl isHighlighted is set</div><div class="line">    UIControlStateDisabled     = 1 &lt;&lt; 1,</div><div class="line">    UIControlStateSelected     = 1 &lt;&lt; 2,                  // flag usable by app (see below)</div><div class="line">    UIControlStateFocused NS_ENUM_AVAILABLE_IOS(9_0) = 1 &lt;&lt; 3, // Applicable only when the screen supports focus</div><div class="line">    UIControlStateApplication  = 0x00FF0000,              // additional flags available for application use</div><div class="line">    UIControlStateReserved     = 0xFF000000               // flags reserved for internal framework use</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>通过继承UIControl类，就可以使用OC内建的 target-action 机制以及简化版的 event-handling。主要有以下两类方法来实现UIControl。</p>
@@ -370,8 +367,6 @@
 <p><a href="https://developer.apple.com/reference/uikit/uigesturerecognizer#//apple_ref/occ/cl/UIGestureRecognizer" target="_blank" rel="external">UIGestureRecognizer</a></p>
 <p><a href="https://developer.apple.com/library/content/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/event_delivery_responder_chain/event_delivery_responder_chain.html#//apple_ref/doc/uid/TP40009541-CH4-SW2" target="_blank" rel="external">EventHandlingiPhoneOS</a></p>
 
-          
-        
       
     </div>
     
@@ -386,287 +381,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/UIAppearance学习记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/UIAppearance学习记录/" itemprop="url">UIAppearance学习记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:28:25+08:00">
-                2017-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>UIApearance是一个协议，我们可以通过它来获取一个类的外观代理。通过给这个类的外观代理发送修改消息来自定义一个类的实例的外观。</p>
-<p>通常可以在全局设置某个类的某个属性，这样在整个APP中只要是用到该类的这个属性时就会显示自己设置的样式。也可以将属性设置为某个容器所包含的，比如设置不同控制器的NavigationBar的显示样式。</p>
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ol>
-<li><p>要修改的属性需要在声明的时候写明<code>UI_APPEARANCE_SELECTOR</code>,例如 <code>@property(nonatomic, strong) messageCellLayout *layout UI_APPEARANCE_SELECTOR;</code> 一般自己定义的属性要这样<strong>显示</strong>的声明。因为一些基本的属性如UIButton 的<code>@property(nonatomic) UIEdgeInsets contentEdgeInsets UI_APPEARANCE_SELECTOR;</code>系统已经帮我们完成了这项工作。</p>
-<blockquote>
-<p>注意：后面要加<code>UI_APPEARANCE_SELECTOR</code>的是某个类里面的某一个属性或者方法。意思是这个属性或者方法可以在由这个类生成的对象在显示到window之前被设置或者被调用</p>
-</blockquote>
-</li>
-<li><p>这个属性所在的类要遵守<code>UIAppearance, UIAppearanceContainer</code>这两个协议。不过一般我们修改的类都属于UIView，而UIView已经遵守了这两个协议。所以我们不用<strong>显示</strong>的遵守这两个协议，但必须知道这么回事。</p>
-</li>
-<li><p>使用方法：要修改的属性需要在该对象被加载到UIWindow之前被修改，否则无法修改显示效果。所以一般而言，在APPDelegate中进行设置，即程序加载完成之后就把这些属性设置好。一般格式例如：<code>[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];</code>即这个类调用appearance方法（appearance是属于UIAppearance协议的方法），然后调用修改属性的方法，完成修改。</p>
-</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cocoachina.com/ios/20150720/12671.html" target="_blank" rel="external">南峰子的技术博客:http://www.cocoachina.com/ios/20150720/12671.html</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS懒加载/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/iOS懒加载/" itemprop="url">iOS懒加载</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:14:55+08:00">
-                2017-09-03
-              </time>
+              <a href="/2017/09/03/UIAppearance学习记录/" rel="next" title="UIAppearance学习记录">
+                <i class="fa fa-chevron-left"></i> UIAppearance学习记录
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="什么是懒加载"><a href="#什么是懒加载" class="headerlink" title="什么是懒加载"></a>什么是懒加载</h2><p>懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。</p>
-<h2 id="为什么要用懒加载"><a href="#为什么要用懒加载" class="headerlink" title="为什么要用懒加载"></a>为什么要用懒加载</h2><p>主要目的是为了提升效率</p>
-<ol>
-<li>在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。</li>
-<li>在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一般当APP接收到内存警告时，即在<code>didReceiveMemoryWarning</code>方法中程序员会做一些清理内存的操作，此时我们的数据或者其他控件占用的内存可能会被清理掉，这时如果再去访问这块内存就会出现野指针的问题。</li>
-</ol>
-<p>综合以上两点，我们采用懒加载的方式对数据以及控件进行加载，这样可以保证在使用的时候去加载，而且能保证使用时肯定有。</p>
-<h2 id="怎么用懒加载"><a href="#怎么用懒加载" class="headerlink" title="怎么用懒加载"></a>怎么用懒加载</h2><p>懒加载的实现，就是重写对象的getter方法。即在系统调用某个对象之前先进行判断，如果有这个对象（即对象不为空）就直接返回这个对象，如果对象为空就创建它并且返回它。一般而言需要懒加载的是数据类型和UI控件，以下将对这两点分开阐述。</p>
-<h3 id="数据类型的懒加载"><a href="#数据类型的懒加载" class="headerlink" title="数据类型的懒加载"></a>数据类型的懒加载</h3><p>数据类型的懒加载一般包括字典，数组，以及自定义的模型数据。以数组为例，懒加载的实现为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@interface NewObject()</div><div class="line"></div><div class="line">//声明一个数组属性(数据类型声明为strong)</div><div class="line">@property (nonatomic, strong) NSArray * myArray;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation NewObject</div><div class="line"></div><div class="line">//重写myArray的getter方法</div><div class="line">- (NSArray *)myArray&#123;</div><div class="line">    </div><div class="line">    if (_myArray == nil) &#123;</div><div class="line">        _myArray = [[NSArray alloc] init];</div><div class="line">    &#125;</div><div class="line">    return _myArray;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="UI控件的懒加载"><a href="#UI控件的懒加载" class="headerlink" title="UI控件的懒加载"></a>UI控件的懒加载</h3><p>UI控件一般包括UIView, UIButton等控件。以UIButton为例，如果使用storyboard，在连线时系统默认在类扩展中自动生成<code>@property (weak, nonatomic) IBOutlet UIButton *myButton;</code>。之所以声明为weak属性，是因为storyboard已经对myButton做了强引用，所以在类扩展中直接声明为weak属性，这样减少了出现内存泄露的可能。<br>而使用纯代码实现时，一般的代码模式是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@property (weak, nonatomic) UIButton *myButton;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (UIButton *)myButton&#123;</div><div class="line">    </div><div class="line">    if (_myButton == nil) &#123;</div><div class="line">        UIButton * tempButton = [[UIButton alloc] init];</div><div class="line">        _myButton = tempButton;</div><div class="line">        [self.view addSubview: _myButton];</div><div class="line">    &#125;</div><div class="line">    return _myButton;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>以上代码需要注意几个地方：</p>
-<ol>
-<li><p>为了和storyboard的形式一致，同时也是为了让控件在不用的时候能及时被销毁，属性也声明成了weak类型。</p>
-</li>
-<li><p>weak类型的变量就不能使用<code>_myButton = [[UIButton alloc] init];</code>进行定义。因为myButton是用weak修饰的，这样用<code>[[UIButton alloc] init]</code>申请的内存就只被weak类型的指针指向，而根据ARC内存管理机制，如果一个对象不再被strong指针指向，它将会被释放。所以此处要利用以上的格式定义这个对象。即<br><code>UIButton * tempButton = [[UIButton alloc] init]; 
-_myButton = tempButton;</code><br>这样在本层大括号的作用域内申请的内存地址就有强指针指向了。</p>
-</li>
-<li>对于子控件必须要加载到父view上才能显示出来。所以必须执行<code>addSubview</code>,而这条语句在懒加载中实现即可。具体原因如以下记录中的注释<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (_myButton == nil) &#123;</div><div class="line">        UIButton * tempButton = [[UIButton alloc] init];</div><div class="line">        _myButton = tempButton;</div><div class="line">        [self.view addSubview: _myButton];//调用addSubview，self.view 会对myButton有强引用</div><div class="line">    &#125;//出了这个大括号，tempButton 这个局部对象将会被销毁，如果前面没有执行addSubview，那新申请的button内存又会被释放</div><div class="line">    return _myButton;//如果不执行addSubview或者其他对button内存强引用的语句，那么此处返回的将是nil。</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>当然，以上的示例代码不是绝对的，实现一个功能的方法多种多样，只不过是自己习惯了这种写法，就简单记录一下。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -676,10 +420,11 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -687,6 +432,10 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -707,8 +456,17 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">October-zhuo</p>
@@ -760,6 +518,22 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIControl"><span class="nav-number">1.</span> <span class="nav-text">UIControl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">2.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -887,6 +661,10 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
 
   
 
