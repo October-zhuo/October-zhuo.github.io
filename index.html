@@ -268,6 +268,139 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/UIAppearance学习记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/UIAppearance学习记录/" itemprop="url">UIAppearance学习记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T18:28:25+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>UIApearance是一个协议，我们可以通过它来获取一个类的外观代理。通过给这个类的外观代理发送修改消息来自定义一个类的实例的外观。</p>
+<p>通常可以在全局设置某个类的某个属性，这样在整个APP中只要是用到该类的这个属性时就会显示自己设置的样式。也可以将属性设置为某个容器所包含的，比如设置不同控制器的NavigationBar的显示样式。</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ol>
+<li><p>要修改的属性需要在声明的时候写明<code>UI_APPEARANCE_SELECTOR</code>,例如 <code>@property(nonatomic, strong) messageCellLayout *layout UI_APPEARANCE_SELECTOR;</code> 一般自己定义的属性要这样<strong>显示</strong>的声明。因为一些基本的属性如UIButton 的<code>@property(nonatomic) UIEdgeInsets contentEdgeInsets UI_APPEARANCE_SELECTOR;</code>系统已经帮我们完成了这项工作。</p>
+<blockquote>
+<p>注意：后面要加<code>UI_APPEARANCE_SELECTOR</code>的是某个类里面的某一个属性或者方法。意思是这个属性或者方法可以在由这个类生成的对象在显示到window之前被设置或者被调用</p>
+</blockquote>
+</li>
+<li><p>这个属性所在的类要遵守<code>UIAppearance, UIAppearanceContainer</code>这两个协议。不过一般我们修改的类都属于UIView，而UIView已经遵守了这两个协议。所以我们不用<strong>显示</strong>的遵守这两个协议，但必须知道这么回事。</p>
+</li>
+<li><p>使用方法：要修改的属性需要在该对象被加载到UIWindow之前被修改，否则无法修改显示效果。所以一般而言，在APPDelegate中进行设置，即程序加载完成之后就把这些属性设置好。一般格式例如：<code>[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];</code>即这个类调用appearance方法（appearance是属于UIAppearance协议的方法），然后调用修改属性的方法，完成修改。</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cocoachina.com/ios/20150720/12671.html" target="_blank" rel="external">南峰子的技术博客:http://www.cocoachina.com/ios/20150720/12671.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS懒加载/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -395,147 +528,6 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/hello-new-one/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/02/hello-new-one/" itemprop="url">hello new one</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T10:26:59+08:00">
-                2017-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/测试init/" itemprop="url" rel="index">
-                    <span itemprop="name">测试init</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -588,22 +580,13 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
           
 
           
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
 
           
             
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
