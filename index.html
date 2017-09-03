@@ -268,6 +268,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS-WebKit学习记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="October-zhuo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="October-zhuo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/03/iOS-WebKit学习记录/" itemprop="url">iOS-WebKit学习记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T19:18:38+08:00">
+                2017-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="WKNavigationDelegate"><a href="#WKNavigationDelegate" class="headerlink" title="WKNavigationDelegate"></a>WKNavigationDelegate</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler;</div></pre></td></tr></table></figure>
+<p>webview跳转之前调用，可以根据navigationAction决定是否要进行跳转，即webview是否需要加载新的request。<br>官方解释：</p>
+<blockquote>
+<p>If you do not implement this method, the web view will load the request or, if appropriate, forward it to another application.</p>
+</blockquote>
+<p>如果不实现这个代理方法，webview会默认加载这个request，或者如果可以的话，打开另一个APP。<br>虽然这个方法是optional的，但是在实际使用中，应该实现这个方法。并且应该调用decisionHandler回调。否则会出现加载不出页面等其他意想不到的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler;</div></pre></td></tr></table></figure>
+<p>webview在获取到页面返回信息后决定是否跳转的代理方法。如果此时decisionHandler(WKNavigationResponsePolicyCancel),则webview不加载新的请求，不显示新的界面。<br>官方解释：</p>
+<blockquote>
+<p>If you do not implement this method, the web view will allow the response, if the web view can show it.</p>
+</blockquote>
+<p>如果不实现这个代理方法，webview会在能够显示的时候响应返回信息，加载新界面。但是实际使用中应该主动实现这个方法，并且调用decisionHandler(WKNavigationResponsePolicyAllow)。否则会出现无法加载新界面或者其他意向不到的情况。</p>
+<p>webview开始加载新页面时调用此方法，该方法调用时页面还没有变化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation;</div></pre></td></tr></table></figure></p>
+<p>webview开始加载新页面时调用此方法，当进入新页面（显示新页面）时，此方法被调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation;</div></pre></td></tr></table></figure></p>
+<p>webView新页面加载完成，页面元素完全显示后调用此方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation;</div></pre></td></tr></table></figure></p>
+<p>所以以上方法的调用顺序是：</p>
+<ol>
+<li>decidePolicyForNavigationAction</li>
+<li>didStartProvisionalNavigation</li>
+<li>decidePolicyForNavigationResponse</li>
+<li>didCommitNavigation</li>
+<li>didFinishNavigation</li>
+</ol>
+<h2 id="WKUIDelegate"><a href="#WKUIDelegate" class="headerlink" title="WKUIDelegate"></a>WKUIDelegate</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures</div></pre></td></tr></table></figure>
+<p>对于webview的跳转，会调用navigationDelete协议组中的代理方法。当调用decidePolicyForNavigationAction方法时，会带有参数navigationAction，这个参数里面会有sourceFrame和targetFrame。当targetFrame的mainFrame属性是NO时，表明这个跳转要打开一个新的页面。这个时候回调用以上的UIdelegate代理方法。如果，没有实现以上的方法，则不会生成新的webview，不会建立新的页面。用户的交互会被取消掉，什么也不会发生。</p>
+<p>WKUIDelegate类里有三个关于弹框的代理方法，如果需要JS进行弹框提示，就要实现这三个方法中对应的那个。否则无法看到弹框提示。使用举例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler&#123;</div><div class="line">    //    DLOG(@&quot;msg = %@ frmae = %@&quot;,message,frame);</div><div class="line">    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@&quot;提示&quot; message:message?:@&quot;&quot; preferredStyle:UIAlertControllerStyleAlert];</div><div class="line">    [alertController addAction:([UIAlertAction actionWithTitle:@&quot;取消&quot; style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) &#123;</div><div class="line">        completionHandler(NO);</div><div class="line">    &#125;])];</div><div class="line">    [alertController addAction:([UIAlertAction actionWithTitle:@&quot;确认&quot; style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) &#123;</div><div class="line">        completionHandler(YES);</div><div class="line">    &#125;])];</div><div class="line">    [self presentViewController:alertController animated:YES completion:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="WKUserContentController"><a href="#WKUserContentController" class="headerlink" title="WKUserContentController"></a>WKUserContentController</h2><p>WKUserContentController相当于一个调度器。可以通过给这个contentController添加handler,达到给JS提供调用OC的方法的目的。<br>比如：OC端添加<code>[userContentController addScriptMessageHandler:self name:@&quot;JSCallOC&quot;];</code>,并且定义一个JSCallOC的方法。OC端还要在合适的controller遵守WKScriptMessageHandler协议。实现方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message&#123;</div><div class="line">  NSLog(@&quot;方法名:%@&quot;, message.name);</div><div class="line">    NSLog(@&quot;参数:%@&quot;, message.body);</div><div class="line">    // 方法名</div><div class="line">    NSString *methods = [NSString stringWithFormat:@&quot;%@:&quot;, message.name];</div><div class="line">    SEL selector = NSSelectorFromString(methods);</div><div class="line">    // 调用方法</div><div class="line">    if ([self respondsToSelector:selector]) &#123;</div><div class="line">        [self performSelector:selector withObject:message.body];</div><div class="line">    &#125; else &#123;</div><div class="line">        NSLog(@&quot;未实行方法：%@&quot;, methods);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样在JS端调用<code>window.webkit.messageHandlers.jsCallOC.postMessage({});</code>此处需要在调用时传递一个对象过去，否则方法不会被调用。<br>一次JS调用OC就实现了。</p>
+<p>OC调用JS，简单的实现就调用方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;</div></pre></td></tr></table></figure></p>
+<p>这个方法相比较UIWebview的evaluateJavaScript，有了回调，就能够知道调用的结果。</p>
+<h2 id="userAgent"><a href="#userAgent" class="headerlink" title="userAgent"></a>userAgent</h2><p>属性是一个只读的字符串，声明了浏览器用于 HTTP 请求的用户代理头的值。使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本、浏览器渲染引擎、浏览器语言、浏览器插件等。<br>userAgent实例:Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1</p>
+<h2 id="cookies"><a href="#cookies" class="headerlink" title="cookies"></a>cookies</h2><p>WKwebview 在加载HTTP请求时不会同步 NSHTTPCookiesStorage中已经存在的cookies，这会导致页面无法获取到cookies等问题。解决的方法简单来说就是绕过NSHTTPCookiesStorage或改造加强NSHTTPCookiesStorage。<br>首先，把自己关心的cookies存到全局变量中。<br>其次，在需要加载请求时，通过设置request.allHTTPHeaderFields（此时request是NSURLMutableRequest类型）。把自己保存的Cookie加载上，确保网页能获取到cookie。<br>再次，网页本身进行ajax请求时，可能会获取不到cookies。可以把本地的Cookie通过userContentController addUserScript的方法，添加给网页。<br>具体的实现方法见：<a href="http://www.jianshu.com/p/870dba42ec15" target="_blank" rel="external">http://www.jianshu.com/p/870dba42ec15</a></p>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li><p>WKWebview的bacForwardList属性是用来存放浏览器前进后退的条目的。这个list包括当前的WKBackForWordListItem和前一页面的WKBackForWordListItem（如果有的话），以及后一页面的<br>  <code>@property (readonly, copy) NSURL \*URL</code>;和请求页面时的初始请求URL.<code>@property     (readonly, copy) NSURL \*initialURL</code>;</p>
+</li>
+<li><p>WKFrameInfo是一个存储webview相关信息的类。这个类是临时性的。包括</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//@abstract A Boolean value indicating whether the frame is the main frame</div><div class="line">// or a subframe.</div><div class="line">@property (nonatomic, readonly, getter=isMainFrame) BOOL mainFrame;判断当前的webview是不是主frame，当有多个webview时起作用。类似于浏览器有多个窗口，判断是不是主窗口。</div><div class="line">//@abstract The frame&apos;s current request.</div><div class="line">@property (nonatomic, readonly, copy) NSURLRequest *request;</div><div class="line">//@abstract The frame&apos;s current security origin.</div><div class="line">@property (nonatomic, readonly) WKSecurityOrigin *securityOrigin API_AVAILABLE(macosx(10.11), ios(9.0)//个人理解因为原先获取request属性时，有可能出现获取失败，拿不到数据的情况。所以添加这个属性。保证能够安全的得到请求的request。WKSecurityOrigin包括request的protocol，host，port。但是不包括path。</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/iOS后台推送证书相关-java-php-go语言pem证书生成/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1313,7 +1472,7 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
