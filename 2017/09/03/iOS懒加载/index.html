@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -95,16 +95,18 @@
 
 
 
-<meta name="description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="October-zhuo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="##什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 ##为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS懒加载">
+<meta property="og:url" content="http://yoursite.com/2017/09/03/iOS懒加载/index.html">
 <meta property="og:site_name" content="October-zhuo">
-<meta property="og:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta property="og:description" content="##什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 ##为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-03T10:18:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="October-zhuo">
-<meta name="twitter:description" content="主要但不限于分享iOS开发经验与优秀作品。总结技术学习路上的心得体会。">
+<meta name="twitter:title" content="iOS懒加载">
+<meta name="twitter:description" content="##什么是懒加载懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。 ##为什么要用懒加载主要目的是为了提升效率  在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。 在iOS开发中，如果某个APP占用内存过大，系统会给这个APP发送内存警告，一">
 
 
 
@@ -134,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/03/iOS懒加载/"/>
 
 
 
 
 
-  <title>October-zhuo</title>
+  <title>iOS懒加载 | October-zhuo</title>
   
 
 
@@ -159,8 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -253,9 +254,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -285,9 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/03/iOS懒加载/" itemprop="url">iOS懒加载</a></h1>
+          <h1 class="post-title" itemprop="name headline">iOS懒加载</h1>
         
 
         <div class="post-meta">
@@ -337,9 +336,7 @@
       
 
       
-        
-          
-            <p>##什么是懒加载<br>懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。</p>
+        <p>##什么是懒加载<br>懒加载是延时加载，即在使用到该对象的时候才将其加载到内存中。</p>
 <p>##为什么要用懒加载<br>主要目的是为了提升效率</p>
 <ol>
 <li>在iOS开发中，加载数据的操作一般放在viewDidLoad中，而如果此时展示的界面不需要数据，那我们可能会因为人为的加载了数据而影响了系统的性能。还不如让系统利用这段时间做它认为更加重要的事情。</li>
@@ -363,8 +360,6 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 </ol>
 <p>当然，以上的示例代码不是绝对的，实现一个功能的方法多种多样，只不过是自己习惯了这种写法，就简单记录一下。</p>
 
-          
-        
       
     </div>
     
@@ -379,274 +374,36 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/hello-new-one/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/02/hello-new-one/" itemprop="url">hello new one</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T10:26:59+08:00">
-                2017-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/测试init/" itemprop="url" rel="index">
-                    <span itemprop="name">测试init</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/helloHexo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/02/helloHexo/" itemprop="url">helloHexo</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+              <a href="/2017/09/02/hello-new-one/" rel="next" title="hello new one">
+                <i class="fa fa-chevron-left"></i> hello new one
+              </a>
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T10:06:32+08:00">
-                2017-09-02
-              </time>
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h1 id="test-hexo-🤣"><a href="#test-hexo-🤣" class="headerlink" title="test hexo 🤣"></a>test hexo 🤣</h1>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -656,138 +413,11 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="October-zhuo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="October-zhuo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/02/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T09:03:51+08:00">
-                2017-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -795,6 +425,10 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -1004,6 +638,10 @@ _myButton = tempButton;</code><br>这样在本层大括号的作用域内申请�
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
 
   
 
