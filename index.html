@@ -1079,10 +1079,10 @@
 <ul>
 <li><code>./configure</code></li>
 <li><code>make</code></li>
-<li><code>make install</code><br>此时protobuf就安装成功了。执行<code>protocbuf --version</code>就可以看到安装的版本号了。</li>
+<li><code>make install</code><br>此时protobuf就安装成功了。执行<code>protoc --version</code>就可以看到安装的版本号了。</li>
 </ul>
 <h2 id="编译生成OC代码"><a href="#编译生成OC代码" class="headerlink" title="编译生成OC代码"></a>编译生成OC代码</h2><p>创建proto文件。此处使用最简单的例子。创建User.proto。里面的内容是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line"></div><div class="line">message UserInfo &#123;</div><div class="line">  required int64 id = 1;</div><div class="line">  required string name = 2;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后使用终端切换到User.proto所在的文件夹路径。执行命令<code>protocbuf User.proto --objc_out=./</code>。以上是最简单的生成OC代码的命令。执行完成后，会在当前文件夹生成User.pbobjc.h和User.pbobjc.m两个文件。到此生成OC代码的工作也完成了。</p>
+<p>然后使用终端切换到User.proto所在的文件夹路径。执行命令<code>protoc User.proto --objc_out=./</code>。以上是最简单的生成OC代码的命令。执行完成后，会在当前文件夹生成User.pbobjc.h和User.pbobjc.m两个文件。到此生成OC代码的工作也完成了。</p>
 <h2 id="工程中使用生成的代码"><a href="#工程中使用生成的代码" class="headerlink" title="工程中使用生成的代码"></a>工程中使用生成的代码</h2><p>在生成.h和.m文件后，把它们引入到自己的工程，如果此时直接编译会报错，原因是没有引入PB的文件。解决方法有两个：</p>
 <ul>
 <li>使用Cocoapod，在podfile中添加<code>pod &#39;Protobuf&#39;</code>注意大小写。然后<code>pod install</code>再编译就可以了。这个方法简单方便。</li>
